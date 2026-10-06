@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🌿 Memory Garden - Game Lật Thẻ Đối Kháng</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Hiệu ứng thiên nhiên bay lơ lửng trong background -->
+  <div class="garden-background">
+    <div class="floating-item leaf-1">🍃</div>
+    <div class="floating-item petal-1">🌸</div>
+    <div class="floating-item cloud-1">☁️</div>
+    <div class="floating-item butterfly-1">🦋</div>
+    <div class="floating-item leaf-2">🌿</div>
+    <div class="floating-item petal-2">🌷</div>
+    <div class="floating-item cloud-2">☁️</div>
+    <div class="floating-item butterfly-2">🦋</div>
+  </div>
+
+  <!-- Nút tiện ích góc phải (Âm thanh & Hướng dẫn) -->
+  <header class="top-nav">
+    <div class="brand-mini" id="miniLogo">🌿 Memory Garden</div>
+    <div class="nav-actions">
+      <button id="btnSoundToggle" class="btn-icon" title="Bật/Tắt âm thanh" aria-label="Bật/Tắt âm thanh">
+        <span id="soundIcon">🔊</span>
+      </button>
+      <button id="btnHelp" class="btn-icon" title="Xem luật chơi" aria-label="Xem luật chơi">
+        <span>❓</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Container chính -->
+  <main class="app-container">
+
+    <!-- ==================== MÀN HÌNH 1: HOME ==================== -->
+    <section id="screenHome" class="screen active">
+      <div class="home-card">
+        <div class="logo-area">
+          <div class="logo-badge">🌸 Casual Memory Battle 🌸</div>
+          <h1 class="game-title">🌿 MEMORY GARDEN 🌿</h1>
+          <p class="game-subtitle">Cuộc so tài trí nhớ trong khu vườn hoa quả đáng yêu</p>
+        </div>
+
+        <div class="menu-buttons">
+          <!-- Chế độ Chơi với Máy -->
+          <button id="btnOpenBotModal" class="btn-menu btn-primary">
+            <span class="btn-icon-large">👤 ⚔️ 🤖</span>
+            <div class="btn-text-group">
+              <span class="btn-title">CHƠI VỚI MÁY</span>
+              <span class="btn-desc">Đấu trí với Garden Bot (Dễ, Vừa, Khó)</span>
+            </div>
+          </button>
+
+          <!-- Chế độ Chơi Online -->
+          <button id="btnOpenOnlineModal" class="btn-menu btn-secondary">
+            <span class="btn-icon-large">👤 ⚔️ 👤</span>
+            <div class="btn-text-group">
+              <span class="btn-title">ĐẤU ONLINE 2 NGƯỜI</span>
+              <span class="btn-desc">Tạo hoặc nhập mã phòng bằng Socket.IO</span>
+            </div>
+          </button>
+
+          <!-- Hướng dẫn chơi -->
+          <button id="btnMenuHelp" class="btn-menu btn-outline">
+            <span class="btn-icon-large">📖</span>
+            <div class="btn-text-group">
+              <span class="btn-title">CÁCH CHƠI & LUẬT</span>
+              <span class="btn-desc">Tìm hiểu quy tắc lật thẻ và tính điểm</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="home-footer">
+          <p>🍓 8 loại quả & hoa • 16 thẻ • Hoàn toàn Real-time</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MODAL CHỌN ĐỘ KHÓ BOT ==================== -->
+    <div id="modalBotSelect" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>🤖 CHỌN ĐỘ KHÓ MÁY</h3>
+          <button class="btn-close-modal" data-close="modalBotSelect">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">Garden Bot có khả năng ghi nhớ như người thật. Hãy chọn mức độ bạn muốn thử thách:</p>
+          
+          <div class="difficulty-options">
+            <button class="btn-diff" data-diff="easy">
+              <div class="diff-icon">🌱</div>
+              <div class="diff-info">
+                <strong>Dễ (Easy)</strong>
+                <span>Bot chỉ nhớ 1 vài thẻ gần nhất, thích hợp làm quen</span>
+              </div>
+            </button>
+
+            <button class="btn-diff active" data-diff="normal">
+              <div class="diff-icon">🌿</div>
+              <div class="diff-info">
+                <strong>Bình thường (Normal)</strong>
+                <span>Bot nhớ các thẻ đã lật, đôi khi bỏ lỡ cơ hội</span>
+              </div>
+            </button>
+
+            <button class="btn-diff" data-diff="hard">
+              <div class="diff-icon">🌳</div>
+              <div class="diff-info">
+                <strong>Khó (Hard)</strong>
+                <span>Trí nhớ tuyệt hảo, tận dụng mọi cặp thẻ nhìn thấy!</span>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="btnStartBotGame" class="btn-action btn-confirm">BẮT ĐẦU CHƠI 🚀</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== MÀN HÌNH 2: ONLINE LOBBY ==================== -->
+    <section id="screenOnline" class="screen">
+      <div class="lobby-card">
+        <div class="lobby-header">
+          <button id="btnBackToHomeFromLobby" class="btn-back">← Trang chủ</button>
+          <h2>🌸 PHÒNG ĐẤU ONLINE</h2>
+        </div>
+
+        <div class="lobby-tabs">
+          <button id="tabCreate" class="tab-btn active">TẠO PHÒNG MỚI</button>
+          <button id="tabJoin" class="tab-btn">THAM GIA PHÒNG</button>
+        </div>
+
+        <!-- Khung Tạo phòng -->
+        <div id="panelCreateRoom" class="lobby-panel active">
+          <div class="input-group">
+            <label for="createPlayerName">Tên của bạn:</label>
+            <input type="text" id="createPlayerName" placeholder="Nhập tên bạn (vd: Hoa Hồng)" maxlength="15" value="Player 1">
+          </div>
+          <button id="btnDoCreateRoom" class="btn-action btn-confirm">🌿 TẠO PHÒNG MỚI</button>
+
+          <!-- Trạng thái chờ sau khi tạo -->
+          <div id="waitingRoomBox" class="waiting-box hidden">
+            <div class="spinner-leaf">🌸</div>
+            <p class="waiting-title">ĐÃ TẠO PHÒNG THÀNH CÔNG!</p>
+            <div class="room-code-display">
+              <span class="code-label">MÃ PHÒNG CỦA BẠN:</span>
+              <div class="code-badge-wrap">
+                <span id="createdRoomCode" class="room-code-text">----</span>
+                <button id="btnCopyCode" class="btn-copy" title="Sao chép mã phòng">📋 Copy</button>
+              </div>
+            </div>
+            <p class="waiting-subtitle">Gửi mã này cho bạn bè để bắt đầu trận đấu...</p>
+            <div id="copySuccessMsg" class="copy-success-badge hidden">✓ Đã copy mã vào clipboard!</div>
+          </div>
+        </div>
+
+        <!-- Khung Tham gia phòng -->
+        <div id="panelJoinRoom" class="lobby-panel">
+          <div class="input-group">
+            <label for="joinPlayerName">Tên của bạn:</label>
+            <input type="text" id="joinPlayerName" placeholder="Nhập tên bạn (vd: Hướng Dương)" maxlength="15" value="Player 2">
+          </div>
+          <div class="input-group">
+            <label for="inputRoomCode">Mã phòng (4 ký tự):</label>
+            <input type="text" id="inputRoomCode" placeholder="Ví dụ: G7K2" maxlength="6" class="input-code">
+          </div>
+          <button id="btnDoJoinRoom" class="btn-action btn-confirm">🚀 THAM GIA NGAY</button>
+        </div>
+
+        <div id="lobbyError" class="lobby-error hidden"></div>
+      </div>
+    </section>
+
+    <!-- ==================== MÀN HÌNH 3: BÀN CHƠI GAME ==================== -->
+    <section id="screenGame" class="screen">
+      <div class="game-wrapper">
+        
+        <!-- Bảng điểm & thông tin người chơi -->
+        <div class="scoreboard-card">
+          
+          <!-- Người chơi 1 -->
+          <div class="player-box p1" id="p1Box">
+            <div class="player-avatar" id="p1Avatar">👤</div>
+            <div class="player-details">
+              <div class="player-name" id="p1Name">Bạn</div>
+              <div class="score-pill">
+                <span class="score-num" id="p1Score">0</span> <span class="score-label">điểm</span>
+              </div>
+            </div>
+            <div class="turn-indicator" id="p1TurnTag">LƯỢT ĐI</div>
+          </div>
+
+          <!-- Khu vực giữa: Thông tin trận & Mã phòng -->
+          <div class="game-center-meta">
+            <div class="room-badge-wrap" id="gameRoomBadge" style="display: none;">
+              <span class="room-label">Phòng:</span>
+              <strong id="gameRoomCodeText">----</strong>
+            </div>
+            <div class="matched-counter">
+              <span>Đã tìm:</span> <strong id="matchedCountText">0</strong>/8 cặp
+            </div>
+          </div>
+
+          <!-- Người chơi 2 (Máy hoặc Bạn chơi) -->
+          <div class="player-box p2" id="p2Box">
+            <div class="turn-indicator" id="p2TurnTag">LƯỢT ĐI</div>
+            <div class="player-details">
+              <div class="player-name" id="p2Name">Garden Bot</div>
+              <div class="score-pill">
+                <span class="score-num" id="p2Score">0</span> <span class="score-label">điểm</span>
+              </div>
+            </div>
+            <div class="player-avatar" id="p2Avatar">🤖</div>
+          </div>
+
+        </div>
+
+        <!-- Banner thông báo lượt chơi động -->
+        <div class="status-banner" id="statusBanner">
+          <span class="status-icon" id="statusIcon">🌸</span>
+          <span class="status-text" id="statusText">Lượt của bạn! Hãy lật 2 thẻ</span>
+        </div>
+
+        <!-- Bàn cờ 16 thẻ 4x4 -->
+        <div class="board-container">
+          <div class="card-grid" id="cardGrid">
+            <!-- 16 thẻ được tạo bằng JavaScript -->
+          </div>
+        </div>
+
+        <!-- Thanh công cụ bên dưới bàn cờ -->
+        <div class="game-toolbar">
+          <button id="btnRestartGame" class="btn-tool" title="Chơi lại ván mới">
+            <span>🔄</span> Ván mới
+          </button>
+          <button id="btnLeaveGame" class="btn-tool" title="Trở về sảnh">
+            <span>🏡</span> Về sảnh
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODAL KẾT THÚC VÁN ĐẤU (GAME OVER) ==================== -->
+  <div id="modalGameOver" class="modal-overlay">
+    <div class="modal-card modal-gameover">
+      <div class="victory-ribbon">🌸 GARDEN COMPLETE 🌸</div>
+      <h2 id="goResultTitle" class="go-title">🏆 BẠN ĐÃ CHIẾN THẮNG!</h2>
+      <p id="goResultDesc" class="go-desc">Khu vườn đã được dọn sạch hoàn hảo!</p>
+
+      <div class="go-scores-box">
+        <div class="go-player-score" id="goP1Row">
+          <span class="go-pname" id="goP1Name">👤 You</span>
+          <span class="go-score" id="goP1Score">5 điểm</span>
+        </div>
+        <div class="go-divider">VS</div>
+        <div class="go-player-score" id="goP2Row">
+          <span class="go-pname" id="goP2Name">🤖 Garden Bot</span>
+          <span class="go-score" id="goP2Score">3 điểm</span>
+        </div>
+      </div>
+
+      <div class="go-actions">
+        <button id="btnGoPlayAgain" class="btn-action btn-confirm">🔄 CHƠI LẠI NGAY</button>
+        <button id="btnGoHome" class="btn-action btn-outline">🏡 VỀ TRANG CHỦ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL HƯỚNG DẪN CÁCH CHƠI ==================== -->
+  <div id="modalHelp" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>📖 HƯỚNG DẪN CHƠI MEMORY GARDEN</h3>
+        <button class="btn-close-modal" data-close="modalHelp">✕</button>
+      </div>
+      <div class="modal-body rules-content">
+        <div class="rule-item">
+          <div class="rule-num">1</div>
+          <div class="rule-text">
+            <strong>Bàn cờ 16 thẻ:</strong> Gồm 8 cặp hoa quả (🌸, 🌻, 🌷, 🌹, 🍎, 🍓, 🍊, 🍉) được úp ngẫu nhiên.
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num">2</div>
+          <div class="rule-text">
+            <strong>Lật đúng cặp:</strong> Nếu lật được 2 thẻ giống nhau, bạn được <strong>+1 điểm</strong>, 2 thẻ giữ ngửa và bạn được <strong>tiếp tục lượt chơi</strong>!
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num">3</div>
+          <div class="rule-text">
+            <strong>Lật sai cặp:</strong> Hai thẻ sẽ úp lại sau 1 giây và <strong>chuyển lượt</strong> cho đối thủ.
+          </div>
+        </div>
+        <div class="rule-item">
+          <div class="rule-num">4</div>
+          <div class="rule-text">
+            <strong>Chiến thắng:</strong> Khi toàn bộ 8 cặp được mở, người có điểm số cao hơn là người chiến thắng!
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action btn-confirm" data-close="modalHelp">ĐÃ HIỂU, CHƠI THÔI! 🌿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast thông báo nhỏ -->
+  <div id="toastBox" class="toast-box"></div>
+
+  <!-- Socket.IO Client -->
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Game Logic -->
+  <script src="game.js"></script>
+</body>
+</html>

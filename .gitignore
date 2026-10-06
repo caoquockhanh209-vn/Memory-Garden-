@@ -1,0 +1,5 @@
+node_modules/
+*.log
+cloudflared.exe
+test-e2e.js
+.env
